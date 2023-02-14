@@ -8,8 +8,10 @@ const apiUrls = {
 if (window.location.hostname === 'localhost') {
 	apiUrl = apiUrls.development
 } else {
-	apiUrl = apiUrls.production
+  apiUrl = apiUrls.production
 }
+
+console.log(window.location.hostname)
 
 console.log(apiUrl)
 export default apiUrl
