@@ -10,6 +10,5 @@ if (window.location.hostname === 'localhost') {
   apiUrl = apiUrls.production
 }
 
-console.log(apiUrl)
 
 export default apiUrl
