@@ -54,7 +54,7 @@ export const ShowIdea = (props) => {
       <Card className="m-2" style={setBgCondition(idea.phase)}>
               <Card.Header>{idea.title}</Card.Header>
               <Card.Body>
-                  <small>{idea.description}</small><br/>
+          <small>{idea.description}</small><br />
               </Card.Body>
               <Card.Footer>
                   <small>Phase: {idea.phase}</small><br/>

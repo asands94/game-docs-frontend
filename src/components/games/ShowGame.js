@@ -63,6 +63,7 @@ export const ShowGame = (props) => {
     if (game.ideas.length > 0) {
       ideaCards = game.ideas.map((idea) => (
         <ShowIdea
+          key={ idea.id}
           idea={idea}
           user={user}
           game={game}

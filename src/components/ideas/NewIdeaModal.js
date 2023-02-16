@@ -14,12 +14,10 @@ export const NewIdeaModal = (props) => {
   })
 
   const onChange = (e) => {
-      e.persist()
-      
+    e.persist()
       setIdea(prevIdea => {
           const updatedName = e.target.name
           let updatedValue = e.target.value
-         
           const updatedIdea = {
               [updatedName] : updatedValue
           }
@@ -30,8 +28,10 @@ export const NewIdeaModal = (props) => {
       })
   }
 
+
   const onSubmit = (e) => {
-      e.preventDefault()
+    e.preventDefault()
+    
       createIdea(user, game.id, idea)
           // first we'll close the modal
           .then(() => handleClose())
@@ -58,7 +58,7 @@ export const NewIdeaModal = (props) => {
       <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton />
           <Modal.Body>
-              <IdeaForm 
+        <IdeaForm 
                   idea={idea}
                   handleChange={onChange}
                   handleSubmit={onSubmit}

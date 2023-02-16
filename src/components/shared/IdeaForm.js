@@ -1,7 +1,7 @@
 import { Form, Button, Container } from 'react-bootstrap'
 
 export const IdeaForm = (props) => {
-  const { idea, handleChange, handleSubmit, heading } = props
+  const {idea, handleChange, handleSubmit, heading } = props
 
   return (
     <Container className='justify-content-center'>
