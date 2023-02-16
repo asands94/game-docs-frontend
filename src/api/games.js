@@ -2,14 +2,6 @@
 import apiUrl from '../apiConfig'
 import axios from 'axios'
 
-// READ -> Index
-export const getAllGames = () => {
-  return axios(`${apiUrl}/games`)
-}
-
-export const getAllArtworks = () => {
-  return axios(`${apiUrl}/artworks`)
-}
 
 // READ -> Index of specific user
 export const getUserGames = (user) => {
