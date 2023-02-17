@@ -4,9 +4,9 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getOneGame, removeGame, updateGame } from '../../api/games'
 import messages from '../shared/AutoDismissAlert/messages'
 import { LoadingScreen } from '../shared/LoadingScreen'
-import { EditGameModal } from './EditGameModal'
 import { ShowIdea } from '../ideas/ShowIdea'
 import { NewIdeaModal } from '../ideas/NewIdeaModal'
+import { GameForm } from '../shared/GameForm'
 
 const ideaCardContainerLayout = {
   display: 'flex',
@@ -15,15 +15,19 @@ const ideaCardContainerLayout = {
 }
 
 export const ShowGame = (props) => {
-  const [game, setGame] = useState(null)
-  const [modalShow, setModalShow] = useState(false)
-  const [ideaModalShow, setIdeaModalShow] = useState(false)
-  const [updated, setUpdated] = useState(false)
+  const [game, setGame] = useState(null) // getting the game data
+  const [ideaModalShow, setIdeaModalShow] = useState(false) // show and hide the idea modal
+  const [updated, setUpdated] = useState(false) // update the idea to display new info after an update
+  const [showForm, setShowForm] = useState(false) // show and hide the update game form
 
-  const { id } = useParams()
-  const navigate = useNavigate()
+  const { id } = useParams() // grab the id that is in the URL to get the correct game to display
+  const navigate = useNavigate() // navigate to a new page
 
-  const { user, msgAlert } = props
+  const { user, msgAlert } = props // user info and mesgAlert that will display a success or failure message
+
+  // ==============================
+  // SHOW ONE GAME
+  // ==============================
 
   useEffect(() => {
     getOneGame(id)
@@ -57,12 +61,15 @@ export const ShowGame = (props) => {
         })
       })
   }
-
+  // ==============================
+  // SHOW EACH IDEA FOR THE GAME
+  // ==============================
   let ideaCards
   if (game) {
     if (game.ideas.length > 0) {
       ideaCards = game.ideas.map((idea) => (
         <ShowIdea
+          key={idea.id}
           idea={idea}
           user={user}
           game={game}
@@ -71,6 +78,52 @@ export const ShowGame = (props) => {
         />
       ))
     }
+  }
+  // ==============================
+  // UPDATE THE GAME
+  // ==============================
+
+  const onChange = e => {
+    e.persist()
+    setGame(prevGame => {
+      const updatedName = e.target.name
+      let updatedValue = e.target.value
+
+      
+      if (updatedName === 'isComplete' && e.target.checked) {
+        updatedValue = true
+      } else if (updatedName === 'isComplete' && !e.target.checked) {
+        updatedValue = false
+      }
+
+      const updatedGame = {
+        [updatedName]: updatedValue
+      }
+      return {
+        ...prevGame, ...updatedGame
+      }
+    })
+  }
+
+  const onSubmit = e => {
+    e.preventDefault()
+
+    updateGame(user, game)
+      .then(() => {
+        msgAlert({
+          heading: 'Oh Yeah!',
+          message: messages.updateGameSuccess,
+          variant: 'success'
+        })
+      })
+      .then(() => setShowForm((prev) => !prev))
+      .catch(() => {
+        msgAlert({
+          heading: 'Oh No!',
+          message: messages.updateGameFailure,
+          variant: 'danger'
+      })
+    })
   }
 
   if (!game) {
@@ -98,14 +151,7 @@ export const ShowGame = (props) => {
               >
                 Add an idea for {game.name}!
               </Button>
-              <Button
-                className='m-2'
-                variant='warning'
-                onClick={() => setModalShow(true)}
-              >
-                {' '}
-                Edit {game.name}
-              </Button>
+              <Button onClick={() => setShowForm((prev) => !prev)}>Edit</Button>
               <Button
                 className='m-2'
                 variant='danger'
@@ -116,19 +162,18 @@ export const ShowGame = (props) => {
             </Card.Footer>
           ) : null}
         </Card>
+        {
+          showForm &&
+          <GameForm
+            game={game}
+            handleChange={onChange}
+            handleSubmit={onSubmit}
+            heading="Update Game" />
+        }
       </Container>
       <Container className='m-2' style={ideaCardContainerLayout}>
         {ideaCards}
       </Container>
-      <EditGameModal
-        user={user}
-        show={modalShow}
-        handleClose={() => setModalShow(false)}
-        updateGame={updateGame}
-        msgAlert={msgAlert}
-        triggerRefresh={() => setUpdated((prev) => !prev)}
-        game={game}
-      />
       <NewIdeaModal
         user={user}
         game={game}

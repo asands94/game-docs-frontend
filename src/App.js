@@ -35,19 +35,18 @@ const App = () => {
 
   return (
     <>
-      
-        <Header user={user} />
-        
+      <Header user={user} />
+
       <Routes>
-    
-          <Route
-            path='/'
+        <Route
+          path='/'
           element={
             <RequireAuth user={user}>
               <Home msgAlert={msgAlert} user={user} />
             </RequireAuth>
-          } />
-          
+          }
+        />
+
         <Route
           path='/sign-up'
           element={<SignUp msgAlert={msgAlert} setUser={setUser} />}
@@ -76,7 +75,7 @@ const App = () => {
           path='/create-game'
           element={
             <RequireAuth user={user}>
-              <CreateGame msgAlert={msgAlert} user={user}/>
+              <CreateGame msgAlert={msgAlert} user={user} />
             </RequireAuth>
           }
         />
@@ -84,7 +83,7 @@ const App = () => {
           path='/games/:id'
           element={
             <RequireAuth user={user}>
-              <ShowGame msgAlert={msgAlert} user={ user} />
+              <ShowGame msgAlert={msgAlert} user={user} />
             </RequireAuth>
           }
         />
